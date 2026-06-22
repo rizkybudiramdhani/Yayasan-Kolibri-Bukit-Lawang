@@ -11,7 +11,7 @@
                     <form action="" method="POST" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="keterangan">Keterangan</label>
-                            <input type="text" name="keterangan" id="keterangan" placeholder="Keterangan Foto" class="input-control" required>
+                            <input type="text" name="keterangan" id="keterangan" placeholder="Keterangan Foto" class="input-control">
                         </div>
                         <div class="form-group">
                             <label for="gambar">Gambar</label>

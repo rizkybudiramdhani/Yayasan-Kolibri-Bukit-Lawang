@@ -4,6 +4,79 @@
         <!-- Nav Bar Start -->
 <?php include 'tampilandepan/t_navbar.php'?>
         <!-- Nav Bar End -->
+<style>
+/* === STYLE UNTUK GALERI / FOTO === */
+.blog-item {
+    border-radius: 8px;
+    overflow: hidden; /* supaya gambar di dalam ikut melengkung */
+    border: 1px solid #e5e5e5;
+    background-color: #fff;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    margin-bottom: 25px;
+}
+
+.blog-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.blog-img {
+    height: 220px;
+    background-size: cover;
+    background-position: center;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    cursor: pointer;
+    transition: filter 0.3s ease;
+}
+
+.blog-img:hover {
+    filter: brightness(0.9);
+}
+
+.blog-text {
+    padding: 15px;
+    text-align: center;
+    background-color: #fff;
+}
+
+.blog-text p {
+    margin: 0;
+    color: #555;
+    font-size: 0.95rem;
+}
+
+/* Modal image styling */
+.modal-content {
+    border-radius: 10px;
+    overflow: hidden;
+}
+.modal-body img {
+    border-radius: 10px;
+}
+
+/* Responsif tambahan */
+@media (max-width: 768px) {
+    .blog-img {
+        height: 180px;
+    }
+}
+.modal-image {
+  max-width: 90vw;        /* batas maksimum lebar 90% dari layar */
+  max-height: 90vh;       /* batas maksimum tinggi 90% dari layar */
+  width: auto;            /* biarkan browser menyesuaikan */
+  height: auto;           /* menjaga rasio asli foto */
+  border-radius: 10px;
+  display: block;
+  margin: auto;
+  box-shadow: 0 0 20px rgba(0,0,0,0.4);
+}
+
+.modal-dialog {
+  max-width: 100%; /* biar modal tidak memotong gambar */
+}
+
+</style>
         
         
         <!-- Page Header Start -->
@@ -63,21 +136,21 @@
 <!-- Blog End -->
 
 <!-- Modal untuk menampilkan gambar yang diperbesar -->
-<div class="modal" id="imageModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content" style="border: none;">
-            <div class="modal-header" style="border: none;" >
-                
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body"  style="padding: 0;">
-                <img src="" alt="Deskripsi Gambar" class="img-fluid" id="modalImage" style="width: 100%; height: auto; max-height: 90vh;">
-            </div>
-        </div>
+<div class="modal fade" id="imageModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content" style="border: none; background: transparent; box-shadow: none;">
+      <div class="modal-header" style="border: none;">
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" style="font-size: 2rem;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body d-flex justify-content-center align-items-center p-0">
+        <img src="" alt="Foto" id="modalImage" class="modal-image">
+      </div>
     </div>
+  </div>
 </div>
+
 
 <!-- Footer Start -->
 <?php include 'tampilandepan/t_footer.php'?>
@@ -95,7 +168,7 @@
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
 <script src="lib/easing/easing.min.js"></script>
-<script src="lib/owlcarousel/owl.carousel.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 <script src="lib/waypoints/waypoints.min.js"></script>
 <script src="lib/counterup/counterup.min.js"></script>
 <script src="lib/parallax/parallax.min.js"></script>

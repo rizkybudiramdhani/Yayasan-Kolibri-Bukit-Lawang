@@ -1,5 +1,5 @@
 <?php
-    session_start();
+    if (session_status() === PHP_SESSION_NONE) session_start();
     include '../koneksi.php';
     if(!isset($_SESSION['status_login']))
         echo "<script>window.location = '../login.php?msg=Harap Login Terlebih Dahulu!'</script>";
@@ -24,20 +24,20 @@
 
             <!-- navbar menu -->
             <ul class="nav-menu float-left">
-                <li><a href="Index.php">Dashboard</a></li>
-                <li><a href="Pengguna.php">Pengguna</a></li>
+                <li><a href="index.php">Dashboard</a></li>
+                <li><a href="pengguna.php">Pengguna</a></li>
             
                 <li><a href="Berita.php">Berita</a></li>
-                <li><a href="Index.php">Galeri <i class="fa fa-caret-down"></i></a>
+                <li><a href="Foto.php">Galeri <i class="fa fa-caret-down"></i></a>
                 <!-- submenu -->
                 <ul class="dropdown">
                     <li><a href="Foto.php">Foto </a></li>
-                    <li><a href="Video.php">Video</a></li>
+                    <li><a href="video.php">Video</a></li>
                 </ul>
                 
                 <li><a href="kontak.php">Pesan</a></li>
             </li>
-                <li><a href="Akun.php"><?= $_SESSION['uname'] ?>     <i class="fa fa-caret-down"></i></a>
+                <li><a href="index.php"><?= $_SESSION['uname'] ?>     <i class="fa fa-caret-down"></i></a>
                     <!-- submenu -->
                     <ul class="dropdown">
                         <li><a href="Logout.php">Keluar</a></li>

@@ -87,7 +87,7 @@
                             ");
 
                             if($update){
-                                echo "<script>window.location='foto.php?success=Edit Data Berhasil'</script>";
+                                echo "<script>window.location='Foto.php?success=Edit Data Berhasil'</script>";
                             }else{
                                 echo 'Gagal Edit'.mysqli_error($conn);
                             }   

@@ -56,7 +56,7 @@
                             <tr>
                                 <td><?= $no++?></td>
                                 <td>
-                                <video width="200" controls>
+                                <video width="200" controls preload="none">
                                     <source src="../img/galeriv/<?=  $p['video'] ?>" type="video/<?= pathinfo($p['video'], PATHINFO_EXTENSION); ?>">
                                     Your browser does not support the video tag.
                                 </video>

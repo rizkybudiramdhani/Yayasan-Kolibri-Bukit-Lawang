@@ -40,12 +40,14 @@
                         
                         <div id="tab-content-3" class="container tab-pane fade">
                          <?=$language["donasiisi4"]  ?>
-                        <br><br>
+                        <br>
+                        <?=$language["donasiisi5"]  ?>
+                        <br>
                         <div class="donate-form">
                             <form class="donate-form-container">
                                 <div class="donate-text-container">
                                     
-                                    <p class="donate-text">BANK BRI | 5262 01 015033 53 8</p>
+                                    <p class="donate-text">BANK BRI | 5262 01 015033 53 8 | Yayasan Kolibri Bukit Lawang</p>
                                     <button class="donate-copy-button" onclick="copytext()">
                                         <i class="fas fa-copy"></i>
                                     </button>

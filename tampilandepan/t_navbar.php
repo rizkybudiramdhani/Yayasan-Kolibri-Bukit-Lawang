@@ -1,5 +1,5 @@
 <?php
-session_start(); 
+if (session_status() === PHP_SESSION_NONE) session_start();
 ?>
 <div class="navbar navbar-expand-lg bg-dark navbar-dark">
     <div class="container-fluid">
@@ -43,4 +43,50 @@ session_start();
     }
 }
 
+
+</style>
+<style>
+    @media (min-width: 768px) {
+        .language {
+            display: none;
+        }
+    }
+
+    /* Tampilkan elemen pada perangkat dengan lebar kurang dari 768px (handphone) */
+    @media (max-width: 767px) {
+        .language {
+            display: block;
+        }
+        
+        /* TAMBAHAN: Kecilkan tulisan YAYASAN KOLIBRI di mobile */
+        .navbar-brand {
+            font-size: 16px !important;
+            letter-spacing: 1px !important;
+        }
+        
+        .navbar-brand img {
+            max-height: 25px !important;
+        }
+        
+        .icon {
+            font-size: 10px !important;
+            letter-spacing: 1px !important;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        /* Untuk HP yang lebih kecil, kecilkan lagi */
+        .navbar-brand {
+            font-size: 14px !important;
+            letter-spacing: 0.5px !important;
+        }
+        
+        .navbar-brand img {
+            max-height: 20px !important;
+        }
+        
+        .icon {
+            font-size: 9px !important;
+        }
+    }
 </style>
