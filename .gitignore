@@ -1,0 +1,90 @@
+# ============================================================
+# KREDENSIAL & KONFIGURASI SENSITIF
+# ============================================================
+
+# File koneksi database — WAJIB tidak di-commit
+koneksi.php
+
+# File environment dan konfigurasi lokal
+.env
+.env.local
+.env.*.local
+config.local.php
+
+# ============================================================
+# DATABASE
+# ============================================================
+
+# Dump database — bisa berisi data pengguna / password
+*.sql
+*.sqlite
+*.db
+
+# ============================================================
+# LOG & DEBUG
+# ============================================================
+
+error_log
+*.log
+logs/
+debug.log
+php_errors.log
+
+# ============================================================
+# UPLOAD PENGGUNA (jangan commit konten dinamis)
+# ============================================================
+
+# Folder upload foto/berita/video yang diisi via admin panel
+img/uploads/
+uploads/
+foto_upload/
+
+# ============================================================
+# SISTEM OPERASI
+# ============================================================
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# ============================================================
+# IDE & EDITOR
+# ============================================================
+
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+nbproject/
+
+# ============================================================
+# DEPENDENCY & BUILD
+# ============================================================
+
+# Composer (jika nanti dipakai)
+vendor/
+composer.lock
+
+# Node (jika nanti dipakai untuk build tools)
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# ============================================================
+# FILE SEMENTARA
+# ============================================================
+
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
