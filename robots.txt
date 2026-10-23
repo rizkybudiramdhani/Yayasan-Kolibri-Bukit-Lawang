@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /login.php
+Disallow: /index11.php
+
+Sitemap: https://yayasankolibri.com/sitemap.xml

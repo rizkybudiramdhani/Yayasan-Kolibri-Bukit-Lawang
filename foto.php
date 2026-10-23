@@ -99,7 +99,7 @@
         <!-- Blog Start -->
         <!-- Blog Start -->
 <?php
-    include 'koneksi.php';
+    include_once 'koneksi.php';
     $ft = mysqli_query($conn, "SELECT * FROM foto ORDER BY id DESC LIMIT 1 ");
     $f = mysqli_fetch_object($ft);
 ?>

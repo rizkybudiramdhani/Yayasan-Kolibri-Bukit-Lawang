@@ -17,6 +17,8 @@ config.local.php
 
 # Dump database — bisa berisi data pengguna / password
 *.sql
+# Pengecualian: file migrasi struktur (tanpa data) memang perlu di-commit
+!sql/migrasi-*.sql
 *.sqlite
 *.db
 

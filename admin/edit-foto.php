@@ -3,6 +3,8 @@
 
 <?php
 
+    // Cast ke integer: menutup celah SQL injection lewat ?id= (berlaku juga untuk UPDATE di bawah)
+    $_GET['id'] = (int) ($_GET['id'] ?? 0);
     $Foto   = mysqli_query($conn, "SELECT * FROM foto WHERE id = '".$_GET['id']."' ");
     
     if(mysqli_num_rows($Foto) == 0){
@@ -65,9 +67,9 @@
                                 
                                 }
 
-                                if(file_exists("../img/galerif/".$_POST['gambar2'])){
+                                if(file_exists("../img/galerif/".basename((string) $_POST['gambar2']))){
 
-                                    unlink("../img/galerif/".$_POST['gambar2']);
+                                    unlink("../img/galerif/".basename((string) $_POST['gambar2']));
 
                                 }
 
@@ -77,7 +79,7 @@
                             }else{
                                 // echo 'user tidak ganti gambar';
 
-                                $rename = $_POST['gambar2'];
+                                $rename = basename((string) $_POST['gambar2']);
                             }
 
                             $update =mysqli_query($conn, "UPDATE foto SET

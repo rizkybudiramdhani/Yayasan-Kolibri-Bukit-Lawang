@@ -1,4 +1,33 @@
-<?php include 'tampilandepan/t_header.php'?>
+<?php
+/*
+ * Data berita diambil SEBELUM header supaya:
+ * 1. Kalau ID tidak ada, bisa redirect pakai HTTP header (bukan script JS).
+ * 2. Judul berita bisa dipakai sebagai <title> & meta description halaman.
+ *
+ * Dulu $_GET['id'] ditempel langsung ke SQL → SQL injection di halaman PUBLIK
+ * (bisa membaca seluruh isi database tanpa login). Sekarang: cast int + prepared statement.
+ */
+include_once __DIR__ . '/koneksi.php';
+
+$idBerita = (int) ($_GET['id'] ?? 0);
+$stmt = mysqli_prepare($conn, 'SELECT judul, keterangan, gambar FROM berita WHERE id = ? LIMIT 1');
+mysqli_stmt_bind_param($stmt, 'i', $idBerita);
+mysqli_stmt_execute($stmt);
+mysqli_stmt_bind_result($stmt, $judulBerita, $isiBerita, $gambarBerita);
+$beritaDitemukan = mysqli_stmt_fetch($stmt);
+mysqli_stmt_close($stmt);
+
+if (!$beritaDitemukan) {
+    header('Location: berita.php');
+    exit;
+}
+$p = (object) ['judul' => $judulBerita, 'keterangan' => $isiBerita, 'gambar' => $gambarBerita];
+
+$pageTitle = $p->judul . ' – Yayasan Kolibri Bukit Lawang';
+$pageDesc  = mb_strimwidth(trim(preg_replace('/\s+/', ' ', strip_tags($p->keterangan))), 0, 155, '…', 'UTF-8');
+
+include 'tampilandepan/t_header.php';
+?>
         <!-- Top Bar End -->
 
         <!-- Nav Bar Start -->
@@ -24,19 +53,10 @@
         
         
         <!-- Blog Start -->
-        <?php 
-        $berita   = mysqli_query($conn, "SELECT * FROM berita WHERE id = '".$_GET['id']."' ");
-    
-        if(mysqli_num_rows($berita) == 0){
-            echo "<script>window.location = 'index.php'</script>";
-        }
-        $p = mysqli_fetch_object($berita);
-    
-        ?>
-        <h3 class="text-center"><?= $p->judul ?></h3>
+        <h1 class="text-center h3"><?= $e($p->judul) ?></h1>
 
         <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
-            <img src="img/upload/<?= $p->gambar ?>" style="width: 50%;" class="images">
+            <img src="img/upload/<?= $e(rawurlencode($p->gambar)) ?>" alt="<?= $e($p->judul) ?>" style="width: 50%;" class="images">
         </div>
         <p class="padding-custom"><?= $p -> keterangan?></p>
         <!-- Blog End -->

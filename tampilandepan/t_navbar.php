@@ -3,7 +3,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
 ?>
 <div class="navbar navbar-expand-lg bg-dark navbar-dark">
     <div class="container-fluid">
-        <a href="index.php" class="navbar-brand"> <img src="img/icon.png" class=image></img> YAYASAN KOLIBRI </a> <a href="index.php" class="icon">BUKIT LAWANG</a>
+        <a href="index.php" class="navbar-brand"> <img src="img/icon.png" class="image" alt="Logo Yayasan Kolibri"> YAYASAN KOLIBRI </a> <a href="index.php" class="icon">BUKIT LAWANG</a>
         <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -22,8 +22,8 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                 </div>
                 <a href="kontak.php" class="nav-item nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'kontak.php' ? 'active' : ''; ?>"><?php echo $language["nav5"]; ?></a>
                 <div class="language">
-                    <a href="?lang=in"> <img src="img/indonesia-flag.png" ></img> </a> ||
-                    <a href="?lang=en"> <img src="img/us-of-america.png" ></img></a>
+                    <a href="<?= $e(url_halaman_bahasa('in', false, true)) ?>" hreflang="id"> <img src="img/indonesia-flag.png" alt="Bahasa Indonesia"> </a> ||
+                    <a href="<?= $e(url_halaman_bahasa('en', false)) ?>" hreflang="en"> <img src="img/us-of-america.png" alt="English"></a>
                 </div>
             </div>
         </div>

@@ -24,7 +24,7 @@
 
         <!-- Video Section Start -->
 <?php
-    include 'koneksi.php';
+    include_once 'koneksi.php';
 
     $per_page = 6;
     $page     = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;

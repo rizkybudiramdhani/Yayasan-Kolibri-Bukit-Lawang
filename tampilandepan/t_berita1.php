@@ -1,5 +1,5 @@
 <?php
-    include 'koneksi.php';
+    include_once 'koneksi.php';
     $tb = mysqli_query($conn, "SELECT * FROM berita ORDER BY id DESC LIMIT 1 ");
     $d = mysqli_fetch_object($tb);
 ?>

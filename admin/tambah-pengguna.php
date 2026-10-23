@@ -33,30 +33,40 @@
                     </form>
                     <?php
                         if(isset($_POST['submit'])){
-                            $nama = addslashes( ucwords($_POST['nama']));
-                            $user = addslashes(($_POST['username']));
-                            $password = $_POST['password'];
-                            $level = $_POST['level'];
+                            require_once __DIR__ . '/../auth_helper.php';
 
-                            $cek = mysqli_query($conn, "SELECT username FROM pengguna WHERE username = '".$user."' ");
-                            if(mysqli_num_rows($cek) > 0 ){
+                            $nama     = ucwords(trim((string) $_POST['nama']));
+                            $user     = trim((string) $_POST['username']);
+                            $password = (string) $_POST['password'];
+                            // Kolom level ENUM('admin'): whitelist, jangan percaya nilai dari form
+                            $level    = 'admin';
+
+                            // Prepared statement menggantikan addslashes (yang bukan proteksi SQL injection yang benar)
+                            $cek = mysqli_prepare($conn, "SELECT id FROM pengguna WHERE username = ? LIMIT 1");
+                            mysqli_stmt_bind_param($cek, 's', $user);
+                            mysqli_stmt_execute($cek);
+                            mysqli_stmt_store_result($cek);
+                            $sudahAda = mysqli_stmt_num_rows($cek) > 0;
+                            mysqli_stmt_close($cek);
+
+                            if ($sudahAda) {
                                 echo '<div class="alert alert-error">Username sudah digunakan</div>';
-                            }else{
-                                $simpan = mysqli_query($conn, "INSERT INTO pengguna VALUES (
-                                    null,
-                                    '".$nama."',
-                                    '".$user."',
-                                    '".$password."',
-                                    '".$level."'
-                                )");
-                                if($simpan){
-                                    echo '<div class="alert alert-success"> Berhasil Simpan</div>';
-                                }else{
-                                    echo 'Gagal Simpan'.mysqli_error($conn);
-                                }   
-                            }
+                            } else {
+                                $disimpan = siapkan_password_untuk_disimpan($conn, $password);
+                                $simpan = mysqli_prepare($conn, "INSERT INTO pengguna (nama, username, password, level) VALUES (?, ?, ?, ?)");
+                                mysqli_stmt_bind_param($simpan, 'ssss', $nama, $user, $disimpan, $level);
 
-                            
+                                if (mysqli_stmt_execute($simpan)) {
+                                    echo '<div class="alert alert-success"> Berhasil Simpan</div>';
+                                    if (!kolom_password_siap($conn)) {
+                                        echo '<div class="alert alert-error">Peringatan: password masih tersimpan tanpa enkripsi. Jalankan sql/migrasi-password.sql di phpMyAdmin.</div>';
+                                    }
+                                } else {
+                                    // Detail error DB sengaja tidak ditampilkan ke layar
+                                    error_log('Gagal tambah pengguna: ' . mysqli_error($conn));
+                                    echo '<div class="alert alert-error">Gagal Simpan</div>';
+                                }
+                            }
                         }
                     
                     ?>

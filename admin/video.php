@@ -17,7 +17,7 @@
                     <?php
                     
                         if(isset($_GET['success'])){
-                            echo "<div class ='alert alert-success'>".$_GET['success']."</div>";
+                            echo "<div class ='alert alert-success'>".htmlspecialchars($_GET['success'], ENT_QUOTES, 'UTF-8')."</div>";
                         }
                     
                     ?>
@@ -46,7 +46,7 @@
                             $no = 1;
                                 $where = " WHERE 1=1";
                                 if(isset($_GET['key'])){
-                                    $where .= " AND keterangan LIKE '%".addslashes($_GET['key'])."%' ";
+                                    $where .= " AND keterangan LIKE '%".mysqli_real_escape_string($conn, $_GET['key'])."%' ";
                                 }
 
                                 $video = mysqli_query($conn,"SELECT * FROM video $where ORDER BY id DESC");

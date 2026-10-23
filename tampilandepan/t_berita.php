@@ -1,7 +1,7 @@
 <?php
 ob_start();
 if (session_status() === PHP_SESSION_NONE) session_start();
-include 'koneksi.php';
+include_once 'koneksi.php';
 $tb = mysqli_query($conn, "SELECT * FROM berita ORDER BY id DESC LIMIT 1 ");
 $d = mysqli_fetch_object($tb);
 $nama_admin = isset($_SESSION['uname']) ? $_SESSION['uname'] : 'Admin';

@@ -1,6 +1,6 @@
 <?php
 // Include koneksi database
-include 'koneksi.php';
+include_once 'koneksi.php';
 
 // Ambil video terbaru dari database
 $query = "SELECT * FROM videod ORDER BY id DESC LIMIT 1";

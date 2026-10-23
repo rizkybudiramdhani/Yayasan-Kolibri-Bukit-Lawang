@@ -1,5 +1,6 @@
 <!doctype html>
 <title>Site Maintenance</title>
+<meta name="robots" content="noindex">
 <style>
   body { text-align: center; padding: 150px; }
   h1 { font-size: 50px; }
