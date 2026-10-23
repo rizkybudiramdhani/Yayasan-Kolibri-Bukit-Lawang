@@ -1,4 +1,4 @@
 <?php
-    // $conn = mysqli_connect('localhost', '', '', 'yaye3692_yayasankolibri') or die ('Gagal terhubung ke database');
-    // $conn = mysqli_connect('localhost', 'yaye3692_yusuf', 'yu5uf51h0t4ng', 'yaye3692_yayasankolibri') or die ('Gagal terhubung ke database');
-?>
+// $conn = mysqli_connect('localhost', '', '', 'yaye3692_yayasankolibri') or die ('Gagal terhubung ke database');
+// $conn = mysqli_connect('localhost', 'yaye3692_yusuf', 'yu5uf51h0t4ng', 'yaye3692_yayasankolibri') or die ('Gagal terhubung ke database');
+$conn = mysqli_connect('localhost', 'Budi', 'M3d@N222003', 'kolibri') or die('Gagal terhubung ke database');

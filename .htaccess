@@ -4,7 +4,7 @@
 # =========================================================
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteRule ^favicon\.ico$ /img/icon.png [L]
+    RewriteRule ^favicon\.ico$ img/icon.png [L]
 </IfModule>
 
 # =========================================================

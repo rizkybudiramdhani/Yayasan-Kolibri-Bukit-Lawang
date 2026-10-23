@@ -236,6 +236,8 @@
 </style>
 
 <script>
+document.addEventListener('DOMContentLoaded', function() {
+if (typeof jQuery === 'undefined') return;
 jQuery(document).ready(function($){
     // Cek apakah di mobile
     function checkMobile() {
@@ -278,5 +280,6 @@ jQuery(document).ready(function($){
     $(window).resize(function(){
         initTeamCarousel();
     });
+});
 });
 </script>

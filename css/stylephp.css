@@ -172,6 +172,15 @@ form{
 .nav-menu li:hover .dropdown{
     display: block;
 }
+.nav-toggle{
+    display: none;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 22px;
+    padding: 15px;
+    cursor: pointer;
+}
 .content{
     
     padding : 80px 0 30px 0;
@@ -238,8 +247,7 @@ form{
     padding: 5px;
     border-radius: 5px;
 }
-/* === Perbaikan Navbar Transparan === */
-.navbar,
+/* === Perbaikan Navbar Transparan (situs publik, tidak dipakai admin) === */
 header,
 .navbar-area,
 .top-bar {
@@ -248,6 +256,14 @@ header,
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   position: relative;
   z-index: 9999;
+}
+
+/* Navbar admin: tetap fixed di atas & warna asli, jangan ikut aturan di atas */
+.navbar {
+  position: fixed;
+  top: 0;
+  z-index: 9999;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* Kalau logomu pakai bg putih, tambahkan ini biar seimbang */
@@ -264,4 +280,106 @@ header,
 
 .navbar a:hover {
   color: #4CAF50 !important;
+}
+
+/* === Responsif Panel Admin (HP/Tablet) === */
+.box-body{
+    overflow-x: auto;
+}
+.box-body .table{
+    min-width: 560px;
+}
+.box-login{
+    width: 300px;
+    max-width: calc(100% - 30px);
+}
+
+@media (max-width: 768px){
+    .navbar{
+        height: auto;
+    }
+    .navbar-inner{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        padding: 8px 15px;
+    }
+    .nav-brand{
+        float: none;
+        margin: 0;
+        padding: 8px 0;
+        font-size: 1.3rem;
+    }
+    .nav-toggle{
+        display: block;
+    }
+    .nav-menu{
+        float: none;
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        max-height: 70vh;
+        overflow-y: auto;
+        background: rgba(20, 20, 20, 0.98);
+        border-radius: 8px;
+        margin-top: 8px;
+    }
+    .nav-menu.is-open{
+        display: flex;
+    }
+    .nav-menu li{
+        width: 100%;
+    }
+    .nav-menu li a{
+        display: block;
+        padding: 12px 16px;
+        border-top: 1px solid rgba(255,255,255,.08);
+    }
+    .nav-menu li .dropdown{
+        position: static;
+        display: none;
+        border: none;
+        background: rgba(255,255,255,.06);
+    }
+    .nav-menu li.dropdown-open .dropdown{
+        display: block;
+    }
+    .nav-menu li .dropdown li a{
+        padding-left: 32px;
+        font-size: .95rem;
+    }
+    .nav-menu li:hover .dropdown{
+        display: none;
+    }
+    .nav-menu li.dropdown-open:hover .dropdown{
+        display: block;
+    }
+    .content{
+        padding: 90px 0 20px 0;
+    }
+    .box-body{
+        padding: 12px;
+    }
+    .input-group input[type="text"]{
+        width: 80%;
+    }
+    .input-group button{
+        width: 20%;
+    }
+}
+
+@media (max-width: 480px){
+    .box-header{
+        font-size: 1rem;
+    }
+    .table th,
+    .table td{
+        padding: 6px;
+        font-size: .85rem;
+    }
+    .btn{
+        padding: 8px 12px;
+        font-size: .9rem;
+    }
 }

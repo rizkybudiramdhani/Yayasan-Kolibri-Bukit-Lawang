@@ -1,6 +1,19 @@
 <?php
 
+    if (session_status() === PHP_SESSION_NONE) session_start();
+    if(!isset($_SESSION['status_login'])){
+        echo "<script>window.location = '../login.php?msg=Harap Login Terlebih Dahulu!'</script>";
+        exit;
+    }
+
     include '../koneksi.php';
+    require_once '../rekomendasi_foto_helper.php';
+
+    foreach (['idpengguna', 'idberita', 'idfoto', 'idvideo', 'idpesan', 'idrekomendasi'] as $kunciId) {
+        if (isset($_GET[$kunciId])) {
+            $_GET[$kunciId] = (int) $_GET[$kunciId];
+        }
+    }
 
     if(isset($_GET['idpengguna'])){
 
@@ -65,5 +78,22 @@
         $delete = mysqli_query($conn, "DELETE FROM pesan WHERE id = '".$_GET['idpesan']."' ");
         echo "<script>window.location = 'kontak.php'</script>";
     }
-    
+
+    if(isset($_GET['idrekomendasi'])){
+        $Rekomendasi = mysqli_query($conn, "SELECT foto FROM rekomendasi WHERE id = '".$_GET['idrekomendasi']."' ");
+
+        if(mysqli_num_rows($Rekomendasi) > 0){
+
+            $p = mysqli_fetch_object($Rekomendasi);
+
+            if(nama_foto_rekomendasi_valid($p->foto) && file_exists("../img/rekomendasi/".$p->foto)){
+                unlink("../img/rekomendasi/".$p->foto);
+            }
+
+        }
+
+        $delete = mysqli_query($conn, "DELETE FROM rekomendasi WHERE id = '".$_GET['idrekomendasi']."' ");
+        echo "<script>window.location = 'rekomendasi.php'</script>";
+    }
+
 ?>

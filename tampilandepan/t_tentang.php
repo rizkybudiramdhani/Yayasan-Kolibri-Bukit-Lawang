@@ -124,7 +124,7 @@
                         </div>
 
                         <div class="sponsor-cta">
-                            <a href="https://wa.me/6285297243719?text=Halo,%20saya%20tertarik%20dengan%20program%20sponsor" class="btn-sponsor">
+                            <a href="https://wa.me/6285297243719?text=Hello%2C%20I%20am%20interested%20in%20the%20sponsorship%20program" class="btn-sponsor">
                                 <i class="fas fa-hands-helping"></i> <?= $language["sponsor7"]?>
                             </a>
                         </div>

@@ -1,0 +1,28 @@
+# Folder ini hanya berisi foto upload pengunjung.
+# Daftar putih: semua file ditolak, kecuali gambar PNG/JPG/GIF.
+<FilesMatch ".">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+<FilesMatch "^rekomendasi[a-zA-Z0-9]+\.(png|jpe?g|gif)$">
+    <IfModule mod_authz_core.c>
+        Require all granted
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order deny,allow
+        Allow from all
+    </IfModule>
+</FilesMatch>
+
+# Lapisan cadangan: kalaupun ada file script lolos, PHP tidak dijalankan di folder ini.
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>
+<IfModule mod_php7.c>
+    php_flag engine off
+</IfModule>
