@@ -21,9 +21,12 @@
 }
 
 .blog-img {
+    display: block;
+    width: 100%;
     height: 220px;
-    background-size: cover;
-    background-position: center;
+    object-fit: cover;
+    object-position: center;
+    background-color: #eef2ea; /* warna kotak saat foto belum termuat (lazy-load) */
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     cursor: pointer;
@@ -100,8 +103,7 @@
         <!-- Blog Start -->
 <?php
     include_once 'koneksi.php';
-    $ft = mysqli_query($conn, "SELECT * FROM foto ORDER BY id DESC LIMIT 1 ");
-    $f = mysqli_fetch_object($ft);
+    $h = function ($t) { return htmlspecialchars((string) $t, ENT_QUOTES, 'UTF-8'); };
 ?>
 <div class="blog">
     <div class="container">
@@ -117,10 +119,18 @@
             ?>
             <div class="col-lg-4 col-md-6"> <!-- Gunakan kolom untuk mengatur item -->
                 <div class="blog-item">
-                    <div class="blog-img" style ="background-image: url('img/galerif/<?= $fth['foto'] ?>');" data-toggle="modal" data-target="#imageModal" data-img-url="img/galerif/<?= $fth['foto'] ?>">
-                    </div>
+                    <?php
+                        $urlFoto = 'img/galerif/' . rawurlencode($fth['foto']);
+                        $ket     = trim((string) $fth['keterangan']);
+                        // Alt dari keterangan foto; kalau kosong, pakai deskripsi umum supaya tetap bermakna
+                        $altFoto = ($ket !== '' ? $ket . ' – ' : 'Kegiatan ') . 'Yayasan Kolibri Bukit Lawang';
+                    ?>
+                    <!-- <img> (bukan background CSS) supaya foto bisa diindeks Google Images & dibaca pembaca layar.
+                         Tampilan tetap kotak 220px karena object-fit: cover. -->
+                    <img src="<?= $h($urlFoto) ?>" alt="<?= $h($altFoto) ?>" loading="lazy"
+                         class="blog-img" data-toggle="modal" data-target="#imageModal" data-img-url="<?= $h($urlFoto) ?>">
                     <div class="blog-text">
-                        <p><?=$fth['keterangan'] ?></p>
+                        <p><?= $h($ket) ?></p>
                     </div>
                     
                 </div>
@@ -184,7 +194,7 @@
     // Script untuk menangani pembukaan modal dan menampilkan gambar yang diperbesar
     $(document).on('click', '.blog-img', function() {
         var imgUrl = $(this).data('img-url');
-        $('#modalImage').attr('src', imgUrl);
+        $('#modalImage').attr('src', imgUrl).attr('alt', $(this).attr('alt'));
     });
 </script>
     </body>

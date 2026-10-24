@@ -11,7 +11,7 @@
                     <form action="" method="POST" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="judul">Judul</label>
-                            <input type="text" name="judul" id="judul" placeholder="Judul Berita" class="input-control" required>
+                            <input type="text" name="judul" id="judul" placeholder="Judul Berita (maks. 150 karakter)" class="input-control" maxlength="150" required>
                         </div>
                         <div class="form-group">
                             <label for="keterangan">Keterangan</label>
@@ -22,7 +22,7 @@
                             <input type="file" name="gambar" id="" class="input-control" required>
                         </div>
                         
-                        <button type="button" class="btn" onclick="window.location = 'berita.php'">Kembali</button>
+                        <button type="button" class="btn" onclick="window.location = 'Berita.php'">Kembali</button>
                         <input type="submit" name="submit" value="Simpan" class="btn btn-blue">
                     </form>
                     <?php
@@ -37,10 +37,10 @@
                             $tmpname = $_FILES['gambar']['tmp_name'];
                             $filesize = $_FILES['gambar']['size'];
 
-                            $formatfile = pathinfo($filename, PATHINFO_EXTENSION);
+                            $formatfile = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
                             $rename = 'berita' .time().'.'.$formatfile;
 
-                            $allowedtype =array('png', 'jpg', 'jpeg', 'gif','mp4');
+                            $allowedtype =array('png', 'jpg', 'jpeg', 'gif'); // mp4 dihapus: gambar berita ditampilkan sebagai <img>
 
                             if(!in_array($formatfile, $allowedtype)){
                                 echo '<div class="alert alert-error"> Format file tidak diizinkan</div>';

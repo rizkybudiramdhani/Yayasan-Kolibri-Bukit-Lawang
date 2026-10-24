@@ -16,7 +16,7 @@
                         </div>
                         <div class="form-group">
                             <label for="keterangan">Keterangan</label>
-                            <input type="text" name="keterangan" id="keterangan" placeholder="Keterangan video" class="input-control">
+                            <input type="text" name="keterangan" id="keterangan" placeholder="Keterangan video" class="input-control" maxlength="255">
                         </div>
        
                         <button type="button" class="btn" onclick="window.location = 'video.php'">Kembali</button>

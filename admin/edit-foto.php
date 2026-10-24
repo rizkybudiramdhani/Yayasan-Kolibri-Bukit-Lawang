@@ -25,7 +25,7 @@
                 <form action="" method="POST" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="keterangan">Keterangan</label>
-                            <input type="text" name="keterangan" value ="<?= $p->keterangan?>" id="keterangan" placeholder="keterangan" class="input-control" required>
+                            <input type="text" name="keterangan" value ="<?= htmlspecialchars($p->keterangan, ENT_QUOTES, 'UTF-8') ?>" id="keterangan" placeholder="Keterangan Foto" class="input-control" maxlength="255" required>
                         </div>
                         <div class="form-group">
                             <label for="gambar">Gambar</label>
@@ -34,7 +34,7 @@
                             <input type="file" name="gambar" id="" class="input-control">
                         </div>
                         
-                        <button type="button" class="btn" onclick="window.location = 'foto.php'">Kembali</button>
+                        <button type="button" class="btn" onclick="window.location = 'Foto.php'">Kembali</button>
                         <input type="submit" name="submit" value="Simpan" class="btn btn-blue">
                     </form>
                     <?php
@@ -50,7 +50,7 @@
                                 $tmpname = $_FILES['gambar']['tmp_name'];
                                 $filesize = $_FILES['gambar']['size'];
 
-                                $formatfile = pathinfo($filename, PATHINFO_EXTENSION);
+                                $formatfile = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
                                 $rename = 'foto' .time().'.'.$formatfile;
 
                                 $allowedtype =array('png', 'jpg', 'jpeg', 'gif');
