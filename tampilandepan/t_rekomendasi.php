@@ -22,36 +22,67 @@ if (isset($_POST['kirim_rekomendasi'])) {
     // Kolom isi bertipe TEXT (maks 65535 byte); dipotong per byte supaya tidak gagal insert diam-diam.
     $isi = is_string($_POST['isi'] ?? null) ? mb_strcut(trim($_POST['isi']), 0, 65535) : '';
 
+    // Token yang barusan sukses dikirim ulang = pengunjung me-refresh halaman setelah berhasil.
+    // Dulu kasus ini memunculkan error "Halaman sudah terlalu lama dibuka" padahal kirimannya sudah masuk.
+    $kirimUlangSetelahSukses = is_string($tokenKiriman)
+        && is_string($_SESSION['rek_token_terkirim'] ?? null)
+        && hash_equals($_SESSION['rek_token_terkirim'], $tokenKiriman);
+
     if (!empty($_POST['website']) || ($tokenValid && $terlaluCepat)) {
         // Bot (honeypot terisi / terlalu cepat): pura-pura sukses supaya bot tidak belajar, tapi tidak disimpan.
         $rekomendasi_sukses_kirim = true;
+    } elseif ($kirimUlangSetelahSukses) {
+        $rekomendasi_sukses_kirim = true; // tampilkan lagi pesan sukses, tanpa menyimpan dobel
     } elseif (!$tokenValid) {
         $rekomendasi_error_kirim = $language['rekomendasi_gagal_form'];
+    } elseif ($nama === '' || $isi === '') {
+        // Dulu gagal diam-diam (form muncul lagi tanpa pesan) jika nama/isi hanya berisi spasi
+        $rekomendasi_error_kirim = $language['rekomendasi_gagal_isi'];
     } else {
-        $stmt = mysqli_prepare($conn, "SELECT COUNT(*) FROM rekomendasi WHERE ip_address = ? AND created_at > NOW() - INTERVAL 1 HOUR");
-        mysqli_stmt_bind_param($stmt, 's', $ip);
-        mysqli_stmt_execute($stmt);
-        mysqli_stmt_bind_result($stmt, $jumlahSejam);
-        mysqli_stmt_fetch($stmt);
-        mysqli_stmt_close($stmt);
-
-        if ($jumlahSejam >= REKOMENDASI_MAKS_PER_JAM) {
-            $rekomendasi_error_kirim = $language['rekomendasi_gagal_batas'];
-        } elseif ($nama !== '' && $isi !== '') {
-            $hasilFoto = simpan_foto_rekomendasi($_FILES['gambar'] ?? [], __DIR__ . '/../img/rekomendasi');
-            $foto = $hasilFoto['filename'];
-            $rekomendasi_error_foto = $hasilFoto['error'];
-
-            $stmt = mysqli_prepare($conn, "INSERT INTO rekomendasi (nama, foto, isi, status, ip_address) VALUES (?, ?, ?, 'pending', ?)");
-            mysqli_stmt_bind_param($stmt, 'ssss', $nama, $foto, $isi, $ip);
-            $tersimpan = mysqli_stmt_execute($stmt);
+        $foto = null;
+        try {
+            $stmt = mysqli_prepare($conn, "SELECT COUNT(*) FROM rekomendasi WHERE ip_address = ? AND created_at > NOW() - INTERVAL 1 HOUR");
+            if (!$stmt) {
+                throw new RuntimeException(mysqli_error($conn));
+            }
+            mysqli_stmt_bind_param($stmt, 's', $ip);
+            mysqli_stmt_execute($stmt);
+            mysqli_stmt_bind_result($stmt, $jumlahSejam);
+            mysqli_stmt_fetch($stmt);
             mysqli_stmt_close($stmt);
 
-            if ($tersimpan) {
+            if ($jumlahSejam >= REKOMENDASI_MAKS_PER_JAM) {
+                $rekomendasi_error_kirim = $language['rekomendasi_gagal_batas'];
+            } else {
+                $hasilFoto = simpan_foto_rekomendasi($_FILES['gambar'] ?? [], __DIR__ . '/../img/rekomendasi');
+                $foto = $hasilFoto['filename'];
+                $rekomendasi_error_foto = $hasilFoto['error'];
+
+                $stmt = mysqli_prepare($conn, "INSERT INTO rekomendasi (nama, foto, isi, status, ip_address) VALUES (?, ?, ?, 'pending', ?)");
+                if (!$stmt) {
+                    throw new RuntimeException(mysqli_error($conn));
+                }
+                mysqli_stmt_bind_param($stmt, 'ssss', $nama, $foto, $isi, $ip);
+                $tersimpan = mysqli_stmt_execute($stmt);
+                mysqli_stmt_close($stmt);
+                if (!$tersimpan) {
+                    throw new RuntimeException(mysqli_error($conn));
+                }
+
                 kirim_notifikasi_rekomendasi($nama, $isi, $foto !== null);
+                $_SESSION['rek_token_terkirim'] = $_SESSION['rek_token'];
                 unset($_SESSION['rek_token']);
                 $rekomendasi_sukses_kirim = true;
             }
+        } catch (Throwable $err) {
+            // Dulu error database (mis. kolom belum ada) membuat beranda berhenti di tengah (fatal error).
+            // Sekarang: catat ke error_log, tampilkan pesan ramah, dan buang foto yang terlanjur tersimpan.
+            error_log('Rekomendasi gagal disimpan: ' . $err->getMessage());
+            if ($foto !== null && nama_foto_rekomendasi_valid($foto)) {
+                @unlink(__DIR__ . '/../img/rekomendasi/' . $foto);
+            }
+            $rekomendasi_error_foto = null;
+            $rekomendasi_error_kirim = $language['rekomendasi_gagal_sistem'];
         }
     }
 }
@@ -61,7 +92,13 @@ if (!is_string($_SESSION['rek_token'] ?? null)) {
 }
 $_SESSION['rek_form_time'] = microtime(true);
 
-$Rekomendasi = mysqli_query($conn, "SELECT * FROM rekomendasi WHERE status = 'approved' ORDER BY id DESC");
+try {
+    $Rekomendasi = mysqli_query($conn, "SELECT * FROM rekomendasi WHERE status = 'approved' ORDER BY id DESC");
+} catch (Throwable $err) {
+    // Tabel bermasalah tidak boleh membuat seluruh beranda error; section cukup tampil tanpa daftar
+    error_log('Rekomendasi gagal dibaca: ' . $err->getMessage());
+    $Rekomendasi = false;
+}
 $jumlah_rekomendasi = $Rekomendasi ? mysqli_num_rows($Rekomendasi) : 0;
 ?>
 
@@ -150,7 +187,8 @@ $jumlah_rekomendasi = $Rekomendasi ? mysqli_num_rows($Rekomendasi) : 0;
 
                             if (file.size > MAX_SIZE) {
                                 var ukuranMB = (file.size / (1024 * 1024)).toFixed(1);
-                                warning.textContent = '<?= $language['rekomendasi_foto_terlalu_besar'] ?> (' + ukuranMB + ' MB, maks 2 MB)';
+                                // json_encode: teks terjemahan yang mengandung tanda kutip tidak lagi merusak JavaScript
+                                warning.textContent = <?= json_encode($language['rekomendasi_foto_terlalu_besar'], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) ?> + ' (' + ukuranMB + ' MB, maks 2 MB)';
                                 warning.hidden = false;
                                 submitBtn.disabled = true;
                             } else {

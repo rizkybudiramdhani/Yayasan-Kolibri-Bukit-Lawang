@@ -40,6 +40,9 @@ php_errors.log
 img/uploads/
 uploads/
 foto_upload/
+# Foto kiriman pengunjung di form rekomendasi (data pribadi, jangan masuk repo publik).
+# .htaccess di folder ini tetap di-commit karena berisi aturan keamanan.
+img/rekomendasi/rekomendasi*
 
 # ============================================================
 # SISTEM OPERASI
