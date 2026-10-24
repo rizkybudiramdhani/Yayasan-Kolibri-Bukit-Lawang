@@ -14,8 +14,8 @@
                         <h2><?=$language["nav3"]  ?></h2>
                     </div>
                     <div class="col-12">
-                        <a href=""><?=$language["nav1"]  ?></a>
-                        <a href=""><?=$language["nav3"]  ?></a>
+                        <a href="index.php"><?=$language["nav1"]  ?></a>
+                        <a href="berita.php"><?=$language["nav3"]  ?></a>
                     </div>
                 </div>
             </div>
@@ -23,6 +23,10 @@
         <!-- Page Header End -->
         
         
+        <!-- Daftar Artikel Start -->
+        <?php $artikelBatas = 9; $artikelPaginasi = true; include 'tampilandepan/t_artikel.php'; ?>
+        <!-- Daftar Artikel End -->
+
         <!-- Blog Start -->
         <?php include 'tampilandepan/t_berita.php' ?>
         <!-- Blog End -->

@@ -18,7 +18,7 @@ $video = mysqli_fetch_assoc($result);
       <!-- Slide 1 -->
       <div class="carousel-item">
         <div class="carousel-img">
-          <img src="img/slide.jpg" alt="Image">
+          <img src="img/slide.jpg" alt="<?= htmlspecialchars($language["alt_slider"], ENT_QUOTES, 'UTF-8') ?>">
 
         </div>
         <div class="carousel-text">
@@ -36,7 +36,7 @@ $video = mysqli_fetch_assoc($result);
       <!-- Slide 2 -->
       <div class="carousel-item">
         <div class="carousel-img">
-          <img src="img/slide2.jpg" alt="Image">
+          <img src="img/slide2.jpg" alt="<?= htmlspecialchars($language["alt_slider"], ENT_QUOTES, 'UTF-8') ?>">
           <div class="overlay"></div>
         </div>
         <div class="carousel-text">
@@ -54,7 +54,7 @@ $video = mysqli_fetch_assoc($result);
       <!-- Slide 3 -->
       <div class="carousel-item">
         <div class="carousel-img">
-          <img src="img/slide3.jpg" alt="Image">
+          <img src="img/slide3.jpg" alt="<?= htmlspecialchars($language["alt_slider"], ENT_QUOTES, 'UTF-8') ?>">
           <div class="overlay"></div>
         </div>
         <div class="carousel-text">

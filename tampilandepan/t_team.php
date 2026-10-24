@@ -1,147 +1,93 @@
+<?php
+/*
+ * Data pengurus: SATU-SATUNYA tempat untuk mengubah nama, jabatan, atau foto.
+ *
+ * Dulu setiap orang ditulis dua kali (grid desktop + carousel mobile yang
+ * disembunyikan CSS), jadi mengganti satu nama harus di dua tempat dan Google
+ * membaca setiap nama dua kali. Sekarang satu markup dipakai untuk semua layar:
+ * grid di desktop, geser (swipe) di HP.
+ *
+ * Ganti 'foto' dengan foto asli tiap pengurus (persegi/potret, ±600px,
+ * simpan di img/team/). Selama masih 'img/team.jpg', semua memakai foto sama.
+ */
+$pengurus = [
+    ['nama' => 'Zahara Rita',            'jabatan' => 'Ketua',      'foto' => 'img/team.jpg'],
+    ['nama' => 'Mayang Yustapa Sihotang', 'jabatan' => 'Sekretaris', 'foto' => 'img/team.jpg'],
+    ['nama' => 'Yusuf Sihotang',         'jabatan' => 'Bendahara',  'foto' => 'img/team.jpg'],
+    ['nama' => 'Fazri Imam Ananda Sht',  'jabatan' => 'Kordinator', 'foto' => 'img/team.jpg'],
+];
+$sosmedYayasan = [
+    'Facebook'  => ['https://www.facebook.com/people/Yayasan-Kolibri-Bukit-Lawang-New/100091601498368/', 'fab fa-facebook-f'],
+    'Instagram' => ['https://www.instagram.com/yayasan_kolibri_bukit_lawang', 'fab fa-instagram'],
+];
+$h = function ($t) { return htmlspecialchars((string) $t, ENT_QUOTES, 'UTF-8'); };
+?>
 <div class="team">
   <div class="container">
     <div class="section-header text-center">
-      <p><?= $language["t"] ?></p>
-      <h2><?= $language["tt"] ?></h2>
-    </div>
-    
-    <!-- Desktop View: Grid -->
-    <div class="row team-grid">
-      <div class="col-lg-3 col-md-6">
-        <div class="team-card">
-          <div class="team-photo">
-            <img src="img/team.jpg" alt="Team Image">
-          </div>
-          <div class="team-info">
-            <h3>Zahara Rita</h3>
-            <p>Ketua</p>
-            <div class="team-social">
-              <a href="https://www.facebook.com/people/Yayasan-Kolibri-Bukit-Lawang-New/100091601498368/"><i class="fab fa-facebook-f"></i></a>
-              <a href="https://www.instagram.com/yayasan_kolibri_bukit_lawang?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="><i class="fab fa-instagram"></i></a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-lg-3 col-md-6">
-        <div class="team-card">
-          <div class="team-photo">
-            <img src="img/team.jpg" alt="Team Image">
-          </div>
-          <div class="team-info">
-            <h3>Mayang Yustapa Sihotang</h3>
-            <p>Sekretaris</p>
-            <div class="team-social">
-              <a href="https://www.facebook.com/people/Yayasan-Kolibri-Bukit-Lawang-New/100091601498368/"><i class="fab fa-facebook-f"></i></a>
-              <a href="https://www.instagram.com/yayasan_kolibri_bukit_lawang?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="><i class="fab fa-instagram"></i></a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-lg-3 col-md-6">
-        <div class="team-card">
-          <div class="team-photo">
-            <img src="img/team.jpg" alt="Team Image">
-          </div>
-          <div class="team-info">
-            <h3>Yusuf Sihotang</h3>
-            <p>Bendahara</p>
-            <div class="team-social">
-              <a href="https://www.facebook.com/people/Yayasan-Kolibri-Bukit-Lawang-New/100091601498368/"><i class="fab fa-facebook-f"></i></a>
-              <a href="https://www.instagram.com/yayasan_kolibri_bukit_lawang?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="><i class="fab fa-instagram"></i></a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-lg-3 col-md-6">
-        <div class="team-card">
-          <div class="team-photo">
-            <img src="img/team.jpg" alt="Team Image">
-          </div>
-          <div class="team-info">
-            <h3>Fazri Imam Ananda Sht</h3>
-            <p>Kordinator</p>
-            <div class="team-social">
-              <a href="https://www.facebook.com/people/Yayasan-Kolibri-Bukit-Lawang-New/100091601498368/"><i class="fab fa-facebook-f"></i></a>
-              <a href="https://www.instagram.com/yayasan_kolibri_bukit_lawang?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="><i class="fab fa-instagram"></i></a>
-            </div>
-          </div>
-        </div>
-      </div>
+      <p><?= $h($language["team_label"]) ?></p>
+      <h2><?= $h($language["tt"]) ?></h2>
     </div>
 
-    <!-- Mobile View: Carousel -->
-    <div class="team-carousel owl-carousel owl-theme">
-      <div class="item">
+    <div class="team-list">
+      <?php foreach ($pengurus as $orang): ?>
+      <div class="team-slot">
         <div class="team-card">
           <div class="team-photo">
-            <img src="img/team.jpg" alt="Team Image">
+            <img src="<?= $h($orang['foto']) ?>"
+                 alt="<?= $h($orang['nama'] . ', ' . $orang['jabatan'] . ' Yayasan Kolibri Bukit Lawang') ?>"
+                 loading="lazy" width="600" height="600">
           </div>
           <div class="team-info">
-            <h3>Zahara Rita</h3>
-            <p>Ketua</p>
+            <h3><?= $h($orang['nama']) ?></h3>
+            <p><?= $h($orang['jabatan']) ?></p>
             <div class="team-social">
-              <a href="https://www.facebook.com/people/Yayasan-Kolibri-Bukit-Lawang-New/100091601498368/"><i class="fab fa-facebook-f"></i></a>
-              <a href="https://www.instagram.com/yayasan_kolibri_bukit_lawang?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="><i class="fab fa-instagram"></i></a>
+              <?php foreach ($sosmedYayasan as $label => [$url, $ikon]): ?>
+                <a href="<?= $h($url) ?>" target="_blank" rel="noopener" aria-label="<?= $h($label) ?> Yayasan Kolibri"><i class="<?= $h($ikon) ?>"></i></a>
+              <?php endforeach; ?>
             </div>
           </div>
         </div>
       </div>
-
-      <div class="item">
-        <div class="team-card">
-          <div class="team-photo">
-            <img src="img/team.jpg" alt="Team Image">
-          </div>
-          <div class="team-info">
-            <h3>Mayang Yustapa Sihotang</h3>
-            <p>Sekretaris</p>
-            <div class="team-social">
-              <a href="https://www.facebook.com/people/Yayasan-Kolibri-Bukit-Lawang-New/100091601498368/"><i class="fab fa-facebook-f"></i></a>
-              <a href="https://www.instagram.com/yayasan_kolibri_bukit_lawang?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="><i class="fab fa-instagram"></i></a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="item">
-        <div class="team-card">
-          <div class="team-photo">
-            <img src="img/team.jpg" alt="Team Image">
-          </div>
-          <div class="team-info">
-            <h3>Yusuf Sihotang</h3>
-            <p>Bendahara</p>
-            <div class="team-social">
-              <a href="https://www.facebook.com/people/Yayasan-Kolibri-Bukit-Lawang-New/100091601498368/"><i class="fab fa-facebook-f"></i></a>
-              <a href="https://www.instagram.com/yayasan_kolibri_bukit_lawang?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="><i class="fab fa-instagram"></i></a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="item">
-        <div class="team-card">
-          <div class="team-photo">
-            <img src="img/team.jpg" alt="Team Image">
-          </div>
-          <div class="team-info">
-            <h3>Fazri Imam Ananda Sht</h3>
-            <p>Kordinator</p>
-            <div class="team-social">
-              <a href="https://www.facebook.com/people/Yayasan-Kolibri-Bukit-Lawang-New/100091601498368/"><i class="fab fa-facebook-f"></i></a>
-              <a href="https://www.instagram.com/yayasan_kolibri_bukit_lawang?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="><i class="fab fa-instagram"></i></a>
-            </div>
-          </div>
-        </div>
-      </div>
+      <?php endforeach; ?>
     </div>
   </div>
 </div>
 
 <style>
+/* Desktop & tablet: grid 4 / 2 kolom */
+.team-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+}
+
+@media (max-width: 991px) {
+  .team-list { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* HP: deretan kartu yang bisa digeser, kartu berikutnya sedikit mengintip
+   sebagai petunjuk bisa di-swipe. Tanpa JavaScript / plugin carousel. */
+@media (max-width: 767px) {
+  .team-list {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding: 4px 4px 16px;
+    margin: 0 -4px;
+    scrollbar-width: thin;
+  }
+
+  .team-slot {
+    flex: 0 0 82%;
+    scroll-snap-align: center;
+  }
+
+  .team-card { margin-bottom: 0; }
+}
+
 .team-card {
   background: #fff;
   border-radius: 20px;
@@ -151,6 +97,7 @@
   text-align: center;
   padding-bottom: 20px;
   margin-bottom: 30px;
+  height: calc(100% - 30px);
 }
 
 .team-card:hover {
@@ -159,6 +106,7 @@
 }
 
 .team-photo img {
+  display: block;
   width: 100%;
   height: 300px;
   object-fit: cover;
@@ -206,80 +154,8 @@
   transform: scale(1.1);
 }
 
-/* Sembunyikan carousel di desktop, tampilkan grid */
-.team-carousel {
-  display: none;
-}
-
-.team-grid {
-  display: flex;
-}
-
-/* Tampilkan carousel di mobile, sembunyikan grid */
-@media (max-width: 767px) {
-  .team-grid {
-    display: none !important;
-  }
-  
-  .team-carousel {
-    display: block !important;
-  }
-  
-  .team-card {
-    margin: 0 10px;
-  }
-  
-  .team-photo img {
-    height: 350px;
-  }
+@media (prefers-reduced-motion: reduce) {
+  .team-card, .team-social a { transition: none; }
+  .team-card:hover { transform: none; }
 }
 </style>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-if (typeof jQuery === 'undefined') return;
-jQuery(document).ready(function($){
-    // Cek apakah di mobile
-    function checkMobile() {
-        return $(window).width() <= 767;
-    }
-    
-    // Initialize carousel untuk mobile
-    function initTeamCarousel() {
-        if (!$.fn.owlCarousel) return; // plugin belum siap, skip
-        if(checkMobile()) {
-            // Destroy dulu kalau sudah ada
-            if($('.team-carousel').hasClass('owl-loaded')) {
-                $('.team-carousel').trigger('destroy.owl.carousel');
-            }
-
-            // Initialize carousel
-            $('.team-carousel').owlCarousel({
-                loop: true,
-                margin: 15,
-                nav: true,
-                dots: true,
-                autoplay: true,
-                autoplayTimeout: 3000,
-                autoplayHoverPause: true,
-                items: 1,
-                navText: ['<i class="fa fa-chevron-left"></i>', '<i class="fa fa-chevron-right"></i>']
-            });
-        } else {
-            // Destroy carousel kalau di desktop
-            if($('.team-carousel').hasClass('owl-loaded')) {
-                $('.team-carousel').trigger('destroy.owl.carousel');
-            }
-        }
-    }
-    
-    // Jalankan saat pertama load
-    initTeamCarousel();
-    
-    // Jalankan ulang saat resize window
-    $(window).resize(function(){
-        initTeamCarousel();
-    });
-});
-});
-</script>

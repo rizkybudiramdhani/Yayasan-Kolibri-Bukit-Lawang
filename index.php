@@ -58,6 +58,11 @@
 <!-- Event End -->
 
 
+<!-- Artikel Terbaru Start (3 terbaru, menaut ke halaman artikel) -->
+<?php $artikelBatas = 3; $artikelPaginasi = false; include 'tampilandepan/t_artikel.php'; ?>
+<!-- Artikel Terbaru End -->
+
+
 <!-- Team Start -->
 <?php include 'tampilandepan/t_team.php' ?>
 <!-- Team End -->

@@ -39,7 +39,7 @@
             <div class="container copyright">
                 <div class="row">
                     <div class="c">
-                        <p>&copy; <a href="Index.php">Yayasan Kolibri &copy; 2024</a>, All Right Reserved.</p>
+                        <p>&copy; <?= date('Y') ?> <a href="/">Yayasan Kolibri Bukit Lawang</a>. All Rights Reserved.</p>
                     </div>
                 </div>
             </div>

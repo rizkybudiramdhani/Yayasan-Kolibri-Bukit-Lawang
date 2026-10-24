@@ -5,7 +5,7 @@
                     <h2><?=$language["kk"]  ?></h2>
                 </div>
                 <div class="contact-img">
-                    <img src="img/contact.jpg" alt="Image">
+                    <img src="img/contact.jpg" alt="<?= htmlspecialchars($language["alt_kontak"], ENT_QUOTES, 'UTF-8') ?>" loading="lazy">
                 </div>
                 <div class="contact-form">
                     <div class="kontak-kirim-group">

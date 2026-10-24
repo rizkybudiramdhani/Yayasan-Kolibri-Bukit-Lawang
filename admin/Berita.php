@@ -44,7 +44,7 @@
                             $no = 1;
                                 $where = " WHERE 1=1";
                                 if(isset($_GET['key'])){
-                                    $where .= " AND nama LIKE '%".mysqli_real_escape_string($conn, $_GET['key'])."%' ";
+                                    $where .= " AND judul LIKE '%".mysqli_real_escape_string($conn, $_GET['key'])."%' "; // tabel berita tidak punya kolom 'nama'
                                 }
 
                                 $berita = mysqli_query($conn,"SELECT * FROM berita $where ORDER BY id DESC");

@@ -24,6 +24,7 @@ if (!$beritaDitemukan) {
 $p = (object) ['judul' => $judulBerita, 'keterangan' => $isiBerita, 'gambar' => $gambarBerita];
 
 $pageTitle = $p->judul . ' – Yayasan Kolibri Bukit Lawang';
+$pageImage = 'img/upload/' . rawurlencode($p->gambar); // preview saat link artikel dibagikan di WA/FB
 $pageDesc  = mb_strimwidth(trim(preg_replace('/\s+/', ' ', strip_tags($p->keterangan))), 0, 155, '…', 'UTF-8');
 
 include 'tampilandepan/t_header.php';
@@ -52,14 +53,25 @@ include 'tampilandepan/t_header.php';
         <!-- Page Header End -->
         
         
-        <!-- Blog Start -->
-        <h1 class="text-center h3"><?= $e($p->judul) ?></h1>
+        <!-- Artikel Start -->
+        <article class="artikel-detail">
+            <div class="container">
+                <h1><?= $e($p->judul) ?></h1>
 
-        <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
-            <img src="img/upload/<?= $e(rawurlencode($p->gambar)) ?>" alt="<?= $e($p->judul) ?>" style="width: 50%;" class="images">
-        </div>
-        <p class="padding-custom"><?= $p -> keterangan?></p>
-        <!-- Blog End -->
+                <figure class="artikel-detail-gambar">
+                    <img src="img/upload/<?= $e(rawurlencode($p->gambar)) ?>" alt="<?= $e($p->judul) ?>">
+                </figure>
+
+                <!-- Di-escape: isi artikel ditulis sebagai teks biasa di admin;
+                     baris baru tetap tampil karena white-space: pre-line -->
+                <div class="artikel-detail-isi"><?= $e($p->keterangan) ?></div>
+
+                <a href="berita.php<?= $lang === 'en' ? '?lang=en' : '' ?>" class="artikel-detail-kembali">
+                    <i class="fa fa-arrow-left" aria-hidden="true"></i> <?= $e($language['artikel_kembali']) ?>
+                </a>
+            </div>
+        </article>
+        <!-- Artikel End -->
 
 
         <!-- Footer Start -->
@@ -91,12 +103,38 @@ include 'tampilandepan/t_header.php';
         <script src="js/main.js"></script>
     </body>
     <style>
-        .padding-custom{
-            padding-left: 100px; 
-            padding-right: 100px;
-            white-space: pre-wrap; 
-            line-height: 1.5; 
+        /* Lebar teks dibatasi ±70 karakter per baris agar nyaman dibaca,
+           menggantikan padding tetap 100px yang membuat teks sempit di HP */
+        .artikel-detail { padding: 45px 0 60px; }
+        .artikel-detail .container { max-width: 820px; }
+        .artikel-detail h1 {
+            font-size: clamp(1.6rem, 4vw, 2.3rem);
+            line-height: 1.25;
+            text-align: center;
+            color: #4a4c70;
+            margin-bottom: 25px;
         }
+        .artikel-detail-gambar { margin: 0 0 30px; }
+        .artikel-detail-gambar img {
+            display: block;
+            width: 100%;
+            max-height: 520px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        .artikel-detail-isi {
+            white-space: pre-line;
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: #444;
+        }
+        .artikel-detail-kembali {
+            display: inline-block;
+            margin-top: 35px;
+            font-weight: 600;
+            color: #75975e;
+        }
+        .artikel-detail-kembali:hover { color: #5a7a47; text-decoration: none; }
     </style>
 </html>
 

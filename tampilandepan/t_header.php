@@ -70,7 +70,8 @@ function url_halaman_bahasa(string $kodeBahasa, bool $absolut = true, bool $paks
 }
 
 $seoCanonical = url_halaman_bahasa($lang);
-$seoOgImage   = SITE_URL . '/img/slide.jpg';
+// Halaman boleh memakai gambar sendiri untuk preview link (mis. foto artikel)
+$seoOgImage   = SITE_URL . '/' . ltrim($pageImage ?? 'img/slide.jpg', '/');
 $e = function ($teks) { return htmlspecialchars((string) $teks, ENT_QUOTES, 'UTF-8'); };
 ?>
 <!DOCTYPE html>
