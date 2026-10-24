@@ -1,10 +1,9 @@
 <?php
+require_once __DIR__ . '/mail_helper.php';
 
 // Ganti alamat penerima di sini kalau notifikasi ingin dikirim ke email lain.
-const REKOMENDASI_NOTIF_KE = 'yusufsihotang70@gmail.com';
-// Pengirim memakai domain website sendiri supaya tidak ditolak/masuk spam oleh Gmail.
-const REKOMENDASI_NOTIF_DARI = 'noreply@yayasankolibri.com';
-const REKOMENDASI_ADMIN_URL = 'https://yayasankolibri.com/admin/rekomendasi.php';
+if (!defined('REKOMENDASI_NOTIF_KE'))   define('REKOMENDASI_NOTIF_KE', 'yusufsihotang70@gmail.com');
+if (!defined('REKOMENDASI_ADMIN_URL'))  define('REKOMENDASI_ADMIN_URL', 'https://yayasankolibri.com/admin/rekomendasi.php');
 
 function kirim_notifikasi_rekomendasi(string $nama, string $isi, bool $adaFoto): bool
 {
@@ -22,21 +21,8 @@ function kirim_notifikasi_rekomendasi(string $nama, string $isi, bool $adaFoto):
         . "Setujui atau hapus di halaman admin:\n"
         . REKOMENDASI_ADMIN_URL . "\n";
 
-    // Baris email maksimal 998 karakter (RFC 5322); isi panjang tanpa enter dipecah supaya tidak rusak di jalan.
-    $isiPesan = wordwrap(str_replace("\r\n", "\n", $isiPesan), 900, "\n", true);
+    $subjek = 'Rekomendasi baru dari ' . $nama . ' menunggu persetujuan';
 
-    $headers = implode("\r\n", [
-        'From: Website Yayasan Kolibri <' . REKOMENDASI_NOTIF_DARI . '>',
-        'MIME-Version: 1.0',
-        'Content-Type: text/plain; charset=UTF-8',
-        'Content-Transfer-Encoding: 8bit',
-    ]);
-
-    $subjek = '=?UTF-8?B?' . base64_encode('Rekomendasi baru dari ' . $nama . ' menunggu persetujuan') . '?=';
-
-    $terkirim = @mail(REKOMENDASI_NOTIF_KE, $subjek, $isiPesan, $headers, '-f' . REKOMENDASI_NOTIF_DARI);
-    if (!$terkirim) {
-        error_log('Notifikasi rekomendasi gagal dikirim ke ' . REKOMENDASI_NOTIF_KE);
-    }
-    return $terkirim;
+    // Kegagalan kirim dicatat ke error_log oleh kirim_email(); rekomendasi tetap tersimpan.
+    return kirim_email(REKOMENDASI_NOTIF_KE, $subjek, $isiPesan);
 }

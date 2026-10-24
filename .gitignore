@@ -11,6 +11,9 @@ koneksi.php
 .env.*.local
 config.local.php
 
+# Pengaturan SMTP berisi password email (contohnya: mail_config.example.php)
+mail_config.php
+
 # ============================================================
 # DATABASE
 # ============================================================

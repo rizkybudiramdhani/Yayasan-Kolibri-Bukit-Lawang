@@ -16,7 +16,7 @@
 # File-file ini tidak untuk publik: log error (berisi path server),
 # dump database, file bahasa mentah, arsip backup, dokumentasi internal.
 # =========================================================
-<FilesMatch "^(error_log|.*\.(sql|ini|log|zip|bak|md)|READ-ME\.txt)$">
+<FilesMatch "^(error_log|mail_config.*\.php|.*\.(sql|ini|log|zip|bak|md)|READ-ME\.txt)$">
     <IfModule mod_authz_core.c>
         Require all denied
     </IfModule>

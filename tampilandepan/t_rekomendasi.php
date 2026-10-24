@@ -51,7 +51,21 @@ if (isset($_POST['kirim_rekomendasi'])) {
             mysqli_stmt_fetch($stmt);
             mysqli_stmt_close($stmt);
 
-            if ($jumlahSejam >= REKOMENDASI_MAKS_PER_JAM) {
+            // Isi yang sama persis dari IP yang sama dalam 1 jam = klik dobel / kirim ulang.
+            // Dianggap sukses tanpa menyimpan lagi, supaya admin tidak menerima entri & email kembar.
+            $stmt = mysqli_prepare($conn, "SELECT COUNT(*) FROM rekomendasi WHERE ip_address = ? AND isi = ? AND created_at > NOW() - INTERVAL 1 HOUR");
+            if (!$stmt) {
+                throw new RuntimeException(mysqli_error($conn));
+            }
+            mysqli_stmt_bind_param($stmt, 'ss', $ip, $isi);
+            mysqli_stmt_execute($stmt);
+            mysqli_stmt_bind_result($stmt, $jumlahKembar);
+            mysqli_stmt_fetch($stmt);
+            mysqli_stmt_close($stmt);
+
+            if ($jumlahKembar > 0) {
+                $rekomendasi_sukses_kirim = true;
+            } elseif ($jumlahSejam >= REKOMENDASI_MAKS_PER_JAM) {
                 $rekomendasi_error_kirim = $language['rekomendasi_gagal_batas'];
             } else {
                 $hasilFoto = simpan_foto_rekomendasi($_FILES['gambar'] ?? [], __DIR__ . '/../img/rekomendasi');
@@ -155,6 +169,9 @@ $jumlah_rekomendasi = $Rekomendasi ? mysqli_num_rows($Rekomendasi) : 0;
 
                 <form method="POST" enctype="multipart/form-data" class="rekomendasi-form" id="formRekomendasi">
                     <input type="hidden" name="rek_token" value="<?= htmlspecialchars($_SESSION['rek_token']) ?>">
+                    <!-- Penanda kiriman di input tersembunyi (bukan di tombol), karena tombol yang
+                         dinonaktifkan saat submit tidak ikut terkirim oleh browser -->
+                    <input type="hidden" name="kirim_rekomendasi" value="1">
                     <input type="text" name="website" class="rekomendasi-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
 
                     <div class="rekomendasi-form-row">
@@ -166,7 +183,7 @@ $jumlah_rekomendasi = $Rekomendasi ? mysqli_num_rows($Rekomendasi) : 0;
                         </div>
                     </div>
                     <textarea name="isi" placeholder="<?= $language['rekomendasi_isi_placeholder'] ?>" required rows="4"><?= htmlspecialchars($isi ?? '') ?></textarea>
-                    <button type="submit" name="kirim_rekomendasi" class="btn-tanya" id="rekomendasiSubmitBtn"><?= $language['rekomendasi_kirim'] ?></button>
+                    <button type="submit" class="btn-tanya" id="rekomendasiSubmitBtn"><?= $language['rekomendasi_kirim'] ?></button>
                 </form>
 
                 <script>
@@ -175,6 +192,13 @@ $jumlah_rekomendasi = $Rekomendasi ? mysqli_num_rows($Rekomendasi) : 0;
                         var input = document.getElementById('rekomendasiFoto');
                         var warning = document.getElementById('rekomendasiFotoWarning');
                         var submitBtn = document.getElementById('rekomendasiSubmitBtn');
+
+                        // Cegah klik dobel: tombol dikunci begitu form terkirim
+                        document.getElementById('formRekomendasi').addEventListener('submit', function() {
+                            submitBtn.disabled = true;
+                            submitBtn.style.opacity = '.7';
+                            submitBtn.textContent = <?= json_encode($language['rekomendasi_mengirim'], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) ?>;
+                        });
 
                         input.addEventListener('change', function() {
                             if (!input.files || !input.files[0]) {

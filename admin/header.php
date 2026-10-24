@@ -47,6 +47,7 @@
                     <a href="index.php"><?= $_SESSION['uname'] ?> <i class="fa fa-caret-down"></i></a>
                     <!-- submenu -->
                     <ul class="dropdown">
+                        <li><a href="tes-email.php">Tes Email</a></li>
                         <li><a href="Logout.php">Keluar</a></li>
                     </ul>
                 </li>
